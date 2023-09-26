@@ -69,6 +69,11 @@
 		}
 
 		if (!isEditMode) {
+			// ai4corim start
+			let myPrePrompt = "As an Analyst I want to get all explicit and implicit actors from the provided text between hashtag marks: #"; 
+			let myPostPrompt = "#.";
+			message.content =  myPrePrompt + message.content + myPostPrompt;
+			// ai4corim end
 			chatStore.addMessageToChat(slug, message, parent || undefined);
 			track('ask');
 		} else if (originalMessage && originalMessage.id) {
@@ -251,6 +256,35 @@
 							class="textarea overflow-hidden min-h-[42px]"
 							rows="1"
 							placeholder="Enter to send, Shift+Enter for newline"
+							use:textareaAutosizeAction
+							on:keydown={handleKeyDown}
+							bind:value={input}
+							bind:this={textarea}
+						/>
+						<div class="flex flex-col md:flex-row items-center justify-end md:items-end">
+							<!-- Insert Code button -->
+							<button
+								type="submit"
+								class="btn btn-sm ml-2"
+								on:click|preventDefault={handleInsertCode}
+							>
+								<CodeBracket class="w-6 h-6" />
+							</button>
+							<!-- Send button -->
+							<button type="submit" class="btn btn-sm ml-2">
+								<PaperAirplane class="w-6 h-6" />
+							</button>
+						</div>
+					</div>
+				</form>
+				<!-- ai4corim --> 
+				<form use:focusTrap={!$isLoadingAnswerStore} on:submit|preventDefault={handleSubmit}>
+					<div class="grid grid-cols-[1fr_auto]">
+						<!-- Input -->
+						<textarea
+							class="textarea overflow-hidden min-h-[42px]"
+							rows="1"
+							placeholder="Data to be modeled. Enter to send, Shift+Enter for newline"
 							use:textareaAutosizeAction
 							on:keydown={handleKeyDown}
 							bind:value={input}
